@@ -4,12 +4,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.chernorotov.placebook.databinding.ActivityMapsBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -50,6 +50,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.isMyLocationEnabled = true
+
         getCurrentLocation()
     }
 
@@ -95,7 +97,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (location != null) {
             val latLng = LatLng(location.latitude, location.longitude)
             Log.d(TAG, "onCompleteLastLocation: $latLng")
-            map.addMarker(MarkerOptions().position(latLng).title("You are here"))
             val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
             map.moveCamera(update)
         } else {
